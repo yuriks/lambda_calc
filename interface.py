@@ -2,7 +2,24 @@
 
 import sys
 from optparse import OptionParser
+import parse.py
 
+def loadExpr():
+    """Lê uma expressão (entrada via teclado)."""
+    expr = raw_input(u'Expressão: ')
+    return parse(expr)
+
+def interactiveMode():
+    """Inicia o modo interativo."""
+    ast = loadExpr();
+    bstep = 0
+    while regex(ast):
+        print bstep, synthetize(ast)
+        ast = step(ast)
+        bstep = bstep + 1
+    print u'Expressão final:', synthetize(ast)
+    print u'Número de passos:', bstep
+     
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
 
@@ -19,6 +36,11 @@ def main():
                         expression step-by-step.")
 
     options, args = parser.parse_args()
+    
+    if(interactive):
+        interactiveMode(); 
+    else:
+        batchMode();
 
 if __name__ == '__main__':
     main()
