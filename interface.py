@@ -3,11 +3,6 @@
 import sys
 from optparse import OptionParser
 
-# data Expr = Var | Apply | LExpr
-# data Var = 'a'..'z'
-# data Apply = ( '(' Expr Expr ')' ) | ( Expr Expr )
-# data LExpr = '$' Var ( '.' Expr )?
-
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
 
