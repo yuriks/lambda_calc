@@ -13,24 +13,8 @@ def interactiveMode():
     """Inicia o modo interativo."""
     ast = loadExpr()
     bsteps = appy(ast)
-    print u'Para avançar para o próximo passo digite n, para voltar p'
-
-    index = 0
-    while True:    
-        print index, "->", synthetize(bstep[index])
-        op = raw_input('~ ')
-        if op.lower() == 'p':
-            index = index - 1
-        elif op.tolower() == 'n':
-            index = index + 1
-        if index >= len(bstep):
-            break
-        elif index < 0:
-            index = 0
-        
-    print u'Expressão final:', synthetize(bsteps[-1])
-    print u'Número de passos:', len(bsteps)
-    
+    for sn, step in enumerate(bsteps):
+        print sn, '->' synthetize(step) 
     op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
     if op.lower() == 'y':
         interactiveMode()
