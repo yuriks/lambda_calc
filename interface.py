@@ -30,7 +30,14 @@ def interactiveMode():
         
     print u'Expressão final:', synthetize(bsteps[-1])
     print u'Número de passos:', len(bsteps)
-     
+    
+    op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
+    if op.lower() == 'y':
+        interactiveMode()
+
+def batchMode():
+    pass
+
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
 
