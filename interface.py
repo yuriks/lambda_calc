@@ -11,14 +11,25 @@ def loadExpr():
 
 def interactiveMode():
     """Inicia o modo interativo."""
-    ast = loadExpr();
-    bstep = 0
-    while regex(ast):
-        print bstep, synthetize(ast)
-        ast = step(ast)
-        bstep = bstep + 1
-    print u'Expressão final:', synthetize(ast)
-    print u'Número de passos:', bstep
+    ast = loadExpr()
+    bsteps = appy(ast)
+    print u'Para avançar para o próximo passo digite n, para voltar p'
+
+    index = 0
+    while True:    
+        print index, "->", synthetize(bstep[index])
+        op = raw_input('~ ')
+        if op.lower() == 'p':
+            index = index - 1
+        elif op.tolower() == 'n':
+            index = index + 1
+        if index >= len(bstep):
+            break
+        elif index < 0:
+            index = 0
+        
+    print u'Expressão final:', synthetize(bsteps[-1])
+    print u'Número de passos:', len(bsteps)
      
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
