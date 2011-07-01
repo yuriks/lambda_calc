@@ -1,7 +1,7 @@
-#retorna as variaveis livres do ast.
-def freeVar(ast):
+#retorna uma lista com as variaveis livres do ast.
+def freeVars(ast):
     if not isRedex(ast):
-        pass
+        return ast
     pass
 
 
