@@ -17,12 +17,18 @@ def step(ast):
     elif ast[0] == S_LAMBDA:
         return set(step(ast[2])).difference(set(ast[1]))
     elif ast[0] == S_APPLY:
-        pass
+        if isRedex(ast):
+            pass
 
-#verifica se uma AST eh um redex.
-def isRedex(exprss):
-    if not exprss[0] == S_LAMBDA:
+#verifica se uma expressao eh um redex.
+def isRedex(exp):
+    if not exp[0] == S_APPLY:
         return False
+    first = exp[1]
+
+    if not first[0] == S_LAMBDA:
+        return False
+
     return True
     
 
