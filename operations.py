@@ -13,13 +13,19 @@ def freeVars(ast):
 #faz a aplicacao de um redex (reduz ele).
 def reduct(redex):
     exp1 = redex[1]
+    if not exp1[0] == S_LAMBDA:
+        return redex
+
     exp2 = redex[2]
 
-    exp1.replace(exp2)
-    return exp1
+    lam_term = exp1[1]
+    return exp1[2].replace(lam_term, exp2)
 
 def step(ast):
-    pass
+    if exp[0] == S_APPLY:
+        if isRedex(ast):
+            ast = reduct(ast)
+            return ast           
 
 #verifica se uma expressao eh um redex.
 def isRedex(exp):
