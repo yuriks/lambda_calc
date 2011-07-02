@@ -2,7 +2,7 @@
 
 import sys
 from optparse import OptionParser
-import parse.py
+from parse import *
 
 def loadExpr():
     """Lê uma expressão (entrada via teclado)."""
