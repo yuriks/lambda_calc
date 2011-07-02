@@ -11,15 +11,17 @@ def loadExpr():
 
 def interactiveMode():
     """Inicia o modo interativo."""
-    ast = loadExpr();
-    bstep = 0
-    while regex(ast):
-        print bstep, synthetize(ast)
-        ast = step(ast)
-        bstep = bstep + 1
-    print u'Expressão final:', synthetize(ast)
-    print u'Número de passos:', bstep
-     
+    ast = loadExpr()
+    bsteps = appy(ast)
+    for sn, step in enumerate(bsteps):
+        print sn, '->' synthetize(step) 
+    op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
+    if op.lower() == 'y':
+        interactiveMode()
+
+def batchMode():
+    pass
+
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
 
