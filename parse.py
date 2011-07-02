@@ -34,4 +34,4 @@ def parse(string):
 def synthetize(ast):
 	return ""
 
-__all__ = [parse, synthetize, S_LAMBDA, S_APPLY, S_VAR, TokenizationError]
+__all__ = ['parse', 'synthetize', 'S_LAMBDA', 'S_APPLY', 'S_VAR', 'TokenizationError']
