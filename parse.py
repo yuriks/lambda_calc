@@ -1,6 +1,7 @@
-# data Expr = Var | Apply | LExpr
+# data Expr = '(' PExpr ')' | PExpr
+# data PExpr = Var | Apply | LExpr
 # data Var = 'a'..'z'
-# data Apply = ( '(' Expr Expr ')' ) | ( Expr Expr )
+# data Apply = Expr Expr
 # data LExpr = '$' Var ( '.' Expr )?
 
 import re
@@ -16,19 +17,68 @@ VAR = 1; LAMBDA = 2; DOT = 3; L_PAREN = 4; R_PAREN = 5; ERROR = 6
 S_LAMBDA = 0; S_APPLY = 1; S_VAR = 2
 
 class TokenizationError(Exception):
-	pass
+	def __init__(self, msg):
+		super(TokenizationError).__init__(self, msg)
 
 def tokenize(string):
 	for m in token_re.finditer(string):
 		if m.lastindex == ERROR:
-			raise TokenizationError
+			raise TokenizationError("Unknown token `%s`" % (m.group(m.lastindex)))
 		else:
 			yield (m.lastindex, m.group(m.lastindex))
 
+class ParseError(Exception):
+	def __init__(self, msg):
+		super(ParseError).__init__(self, msg)
+
+def tryParseVar(tokens):
+	if tokens[0][0] == VAR:
+		t, v = tokens.pop(0)
+		return (S_VAR, v)
+	else:
+		return None
+
+def tryParseLExpr(tokens):
+	if tokens[0][0] == LAMBDA:
+		tokens.pop(0)
+		if tokens[0][0] != VAR:
+			raise ParseError("Expected Var")
+		t, var = tokens.pop(0)
+		if tokens[0][0] != DOT:
+			raise ParseError("Expected `.`")
+		tokens.pop(0)
+		m = tryParseExpr(tokens)
+		if m is None:
+			raise ParseError("Expected PExpr")
+	else:
+		return None
+
+def tryParseApply(tokens):
+	pass
+
+def tryParsePExpr(tokens):
+	m = tryParseVar(tokens)
+	if m is None:
+		m = tryParseLExpr(tokens)
+		if m is None:
+			return tryParseApply(tokens)
+	return m
+
+def tryParseExpr(tokens):
+	if tokens[0][0] == L_PAREN:
+		t, v = tokens.pop(0)
+		val = parsePExpr(tokens)
+		if tokens[0][0] != R_PAREN:
+			raise ParseError("Expected `)`")
+		t, v = tokens.pop(0)
+		return val
+	else:
+		return parsePExpr(tokens)
+		raise ParseError("Expected Var, LExpr or Apply")
 
 # String -> AST
 def parse(string):
-	return None
+	return tryParseExpr(list(tokenize(string)))
 
 # AST -> String
 def synthetize(ast):
