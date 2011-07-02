@@ -15,9 +15,10 @@ def interactiveMode():
     bsteps = appy(ast)
     for sn, step in enumerate(bsteps):
         print sn, '->' synthetize(step) 
-    op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
-    if op.lower() == 'y':
-        interactiveMode()
+    if sys.stdin.isatty():
+        op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
+        if op.lower() == 'y':
+            interactiveMode()
 
 def batchMode(expr = None):
     if expr is None:
