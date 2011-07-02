@@ -15,26 +15,30 @@ def interactiveMode():
     bsteps = appy(ast)
     for sn, step in enumerate(bsteps):
         print sn, '->' synthetize(step) 
-    op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
-    if op.lower() == 'y':
-        interactiveMode()
+    if sys.stdin.isatty():
+        op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
+        if op.lower() == 'y':
+            interactiveMode()
 
-def batchMode():
-    pass
+def batchMode(expr = None):
+    if expr is None:
+        expr = loadExpr()
+    print synthetize(apply(expr)[-1]) 
+    if sys.stdin.isatty():
+        if raw_input(u'Avaliar mais expressões (y/n)? ').lower() == 'y':
+            batchMode()
 
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
 
     parser = OptionParser(usage="usage: %prog [options]")
-    parser.add_option('-m', '--machine', dest="machine_file",
-                      help="File to read expression from, instead of stdin.")
     parser.add_option('-b', '--batch',
-                      action="store_false", dest="interactive",
-                      help="Run in batch mode: Evaluates the expression an retuns
+        action="store_false", dest="interactive",
+        help="Run in batch mode: Evaluates the expression an retuns
                         normal form.")
     parser.add_option('-i', '--interactive',
-                      action="store_true",  dest="interactive", default=interactive,
-                      help="Run in interactive mode: Reads an input and evaluate
+        action="store_true",  dest="interactive", default=interactive,
+        help="Runs in interactive mode: Reads an lambda input and evaluate
                         expression step-by-step.")
 
     options, args = parser.parse_args()
