@@ -20,8 +20,11 @@ def step(ast):
         pass
 
 #verifica se uma AST eh um redex.
-def isRedex(expression):
-    pass
+def isRedex(exprss):
+    if not exprss[0] == S_LAMBDA:
+        return False
+    return True
+    
 
 #retorna true se 'ast' nao tem variaveis livres.
 def isClosed(ast):
