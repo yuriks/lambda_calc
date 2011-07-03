@@ -1,5 +1,8 @@
 from parse import *
 
+SUCC = (0,'n',(0,'f',(0,'x',(1,(2,'f'),(1,(2,'n'),(1,(2,'f'),(2,'x')))))))
+ID = (0,'x',(2,'x'))
+
 #retorna uma lista com as variaveis livres do ast.
 def freeVars(ast):
     if ast[0] == S_VAR:
@@ -33,15 +36,14 @@ def reduct(redex):
 
     exp2 = redex[2]
 
-    new_term = replace(exp1[1], exp2, exp1[2])
-    res = (exp1[0],exp1[1],new_term)
-    return res
+    return replace(exp1[1], exp2, exp1[2])
 
 def betaReduction(ast):
     pass
          
 
 def step(ast):
+    print 'Etapa: ' + str(ast)
     if ast[0] == S_APPLY and isRedex(ast):
         ast = reduct(ast)
     elif ast[0] == S_LAMBDA:
@@ -55,14 +57,8 @@ def step(ast):
 
 #verifica se uma expressao eh um redex.
 def isRedex(exp):
-    if not exp[0] == S_APPLY:
-        return False
-    first = exp[1]
-
-    if not first[0] == S_LAMBDA:
-        return False
-
-    return True
+    empty = set()
+    return freeVars(exp) == empty
     
 
 #retorna true se 'ast' nao tem variaveis livres.
