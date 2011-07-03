@@ -58,7 +58,7 @@ def step(ast):
 #verifica se uma expressao eh um redex.
 def isRedex(exp):
     empty = set()
-    return freeVars(exp) == empty
+    return (freeVars(exp) != empty)
     
 
 #retorna true se 'ast' nao tem variaveis livres.
