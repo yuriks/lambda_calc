@@ -9,10 +9,17 @@ def freeVars(ast):
     elif ast[0] == S_APPLY:
         return set(freeVars(ast[1])).union(set(freeVars(ast[2])))
 
+#lam_term eh o nome do termo lambda. Ex.: $x.t (x eh o termo lambda).
 #faz a substituicao de lam_term por new_exp em term.
 def replace(lam_term, new_exp, term):
-    #todo fazer recursivamente.
-    pass
+    if term[0] == S_VAR:
+        if term[1] == lam_term:
+            return new_exp
+        else:
+            return term
+    elif term[0] == S_LAMBDA:
+        new_term = replace(lam_term,new_exp,term[2])
+        return (term[0], term[1], new_term)
 
 #faz a aplicacao de um redex (reduz ele).
 def reduct(redex):
@@ -22,8 +29,9 @@ def reduct(redex):
 
     exp2 = redex[2]
 
-    lam_term = exp1[1]
-    return exp1[2].replace(lam_term, exp2)
+    new_term = replace(exp1[1], exp2, exp1[2])
+    res = (exp1[0],exp1[1],new_term)
+    return res
 
 def betaReduction(ast):
     pass
