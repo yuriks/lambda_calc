@@ -57,8 +57,3 @@ def step(ast):
 def isRedex(exp):
     empty = set()
     return (freeVars(exp) != empty)
-    
-
-#retorna true se 'ast' nao tem variaveis livres.
-def isClosed(ast):
-    pass
