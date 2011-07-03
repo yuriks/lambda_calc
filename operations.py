@@ -43,13 +43,11 @@ def betaReduction(ast):
          
 
 def step(ast):
-    print 'Etapa: ' + str(ast)
     if ast[0] == S_APPLY and isRedex(ast):
-        ast = reduct(ast)
+        return reduct(ast)
     elif ast[0] == S_LAMBDA:
         s = step(ast[2])
-        res = (ast[0],ast[1],s)
-        ast = s
+        return (ast[0],ast[1],s)
     elif ast[0] == S_VAR:
         pass
     return ast
