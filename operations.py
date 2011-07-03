@@ -20,6 +20,10 @@ def replace(lam_term, new_exp, term):
     elif term[0] == S_LAMBDA:
         new_term = replace(lam_term,new_exp,term[2])
         return (term[0], term[1], new_term)
+    elif term[0] == S_APPLY:
+        lhs = replace(lam_term,new_exp,term[1])
+        rhs = replace(lam_term,new_exp,term[2])
+        return (term[0],lhs,rhs)
 
 #faz a aplicacao de um redex (reduz ele).
 def reduct(redex):
