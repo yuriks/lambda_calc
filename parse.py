@@ -19,7 +19,7 @@ S_LAMBDA = 0; S_APPLY = 1; S_VAR = 2
 
 class TokenizationError(Exception):
 	def __init__(self, msg):
-		super(TokenizationError).__init__(self, msg)
+		super(TokenizationError, self).__init__(msg)
 
 def tokenize(string):
 	for m in token_re.finditer(string):
@@ -30,7 +30,7 @@ def tokenize(string):
 
 class ParseError(Exception):
 	def __init__(self, msg):
-		super(ParseError).__init__(self, msg)
+		super(ParseError, self).__init__(msg)
 
 def tryParseVar(tokens):
 	if tokens[0][0] == VAR:
