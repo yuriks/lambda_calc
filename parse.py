@@ -1,8 +1,8 @@
 # data Expr = '(' PExpr ')' | PExpr
-# data PExpr = Var | Apply | LExpr
+# data PExpr = Var | LExpr | Apply
 # data Var = 'a'..'z'
-# data Apply = Expr Expr
 # data LExpr = '$' Var ( '.' Expr )?
+# data Apply = Expr Expr
 
 import re
 
