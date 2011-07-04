@@ -76,7 +76,7 @@ def step(ast):
 def isRedex(exp):
     """ 
         Verifica se uma expressao eh um redex.
-        Duvida: Quando uma expressao eh um redex?
+        Duvida: Quando uma expressao eh um redex? R. pg 151, cap. 5.
     """
     aux = step(exp)
     return aux != exp
