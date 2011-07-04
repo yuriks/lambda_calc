@@ -51,9 +51,7 @@ def betaReduction(ast):
         Faz a beta reducao de AST ate o seu estado normal.
     """
     result = ast
-    last = None
-    while(result != last):
-        last = result
+    while(isRedex(result)):
         result = step(result)
     return result
 
@@ -79,6 +77,5 @@ def isRedex(exp):
         Verifica se uma expressao eh um redex.
         Duvida: Quando uma expressao eh um redex?
     """
-    empty = set()
-    return (freeVars(exp) != empty) #isso nao ta certo.
-
+    aux = step(exp)
+    return aux != exp
