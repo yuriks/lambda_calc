@@ -76,6 +76,3 @@ def isRedex(exp):
     empty = set()
     return (freeVars(exp) != empty) #isso nao ta certo.
 
-
-SZERO = betaApply(SUCC,ZERO)
-
