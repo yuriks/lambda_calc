@@ -23,7 +23,7 @@ def freeVars(ast):
 def replace(lam_term, new_exp, term):
     """
         Faz a substituicao de lam_term por new_exp em term.
-        lam_term é o nome do termo lambda. Ex.: $x.t (x é o termo lambda).  
+        lam_term eh o nome do termo lambda. Ex.: $x.t (x eh o termo lambda).  
     """
     if term[0] == S_VAR:
         if term[1] == lam_term:
@@ -40,7 +40,7 @@ def replace(lam_term, new_exp, term):
 
 def betaApply(lhs,rhs):
     """ 
-        Faz uma aplicação de rhs em lhs.
+        Faz uma aplicacao de rhs em lhs.
     """
     if lhs[0] == S_LAMBDA:
         return replace(lhs[1], rhs, lhs[2])
@@ -48,7 +48,7 @@ def betaApply(lhs,rhs):
 
 def betaReduction(ast):
     """
-        Faz a beta redução de AST até o seu estado normal.
+        Faz a beta reducao de AST ate o seu estado normal.
     """
     result = ast
     last = None
@@ -59,7 +59,7 @@ def betaReduction(ast):
 
 def step(ast):
     """
-        Faz uma etapa da beta redução de AST.
+        Faz uma etapa da beta reducao de AST.
     """
     if ast[0] == S_VAR:
         return ast
@@ -68,11 +68,6 @@ def step(ast):
     elif ast[0] == S_APPLY:# and isRedex(ast):
         lhs = step(ast[1])
         rhs = step(ast[2])
-        
-        if lhs == None:
-            lhs = ast[1]
-        if rhs == None:
-            rhs = ast[2]
              
         ast = (ast[0],lhs,rhs)  
         result = betaApply(ast[1],ast[2])
@@ -81,8 +76,8 @@ def step(ast):
 
 def isRedex(exp):
     """ 
-        Verifica se uma expressão é um redex.
-        Dúvida: Quando uma expressão é um redex?
+        Verifica se uma expressao eh um redex.
+        Duvida: Quando uma expressao eh um redex?
     """
     empty = set()
     return (freeVars(exp) != empty) #isso nao ta certo.
