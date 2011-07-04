@@ -7,6 +7,9 @@ ZERO = (0,'g',(0,'y',(2,'y')))
 ONE = (1,SUCC,ZERO)
 TWO = (1,SUCC,ONE)
 THREE = (1,SUCC,TWO)
+FOUR = (1,SUCC,THREE)
+FIVE = (1,SUCC,FOUR)
+SIX = (1,SUCC,FIVE)
 
 
 #retorna uma lista com as variaveis livres do ast.
@@ -42,7 +45,9 @@ def betaApply(lhs,rhs):
 
 def betaReduction(ast):
     result = ast
-    while(isRedex(result)):
+    last = None
+    while(result != last):
+        last = result
         result = step(result)
     return result
 
