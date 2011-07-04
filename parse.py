@@ -48,8 +48,8 @@ def tryParseLExpr(tokens):
 		body = None
 		if tokens[0][0] == DOT:
 			tokens.pop(0)
-			expr = tryParseExpr(tokens)
-			if expr is None:
+			body = tryParseExpr(tokens)
+			if body is None:
 				raise ParseError("Expected PExpr")
 		return (S_LAMBDA, var, body)
 	else:
@@ -69,13 +69,13 @@ def tryParsePExpr(tokens):
 def tryParseExpr(tokens):
 	if tokens[0][0] == L_PAREN:
 		t, v = tokens.pop(0)
-		val = parsePExpr(tokens)
+		val = tryParsePExpr(tokens)
 		if tokens[0][0] != R_PAREN:
 			raise ParseError("Expected `)`")
 		t, v = tokens.pop(0)
 		return val
 	else:
-		return parsePExpr(tokens)
+		return tryParsePExpr(tokens)
 		raise ParseError("Expected Var, LExpr or Apply")
 
 # String -> AST
