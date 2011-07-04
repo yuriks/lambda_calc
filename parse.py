@@ -93,4 +93,4 @@ def synthetize(ast):
     elif ast[0] == S_APPLY:
         return '(%s %s)' % (synthetize(ast[1]), synthetize(ast[2]))
 
-__all__ = ['parse', 'synthetize', 'S_LAMBDA', 'S_APPLY', 'S_VAR', 'TokenizationError']
+__all__ = ['parse', 'synthetize', 'S_LAMBDA', 'S_APPLY', 'S_VAR', 'TokenizationError', 'ParseError']
