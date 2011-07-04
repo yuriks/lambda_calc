@@ -1,7 +1,13 @@
 from parse import *
 
-SUCC = (0,'n',(0,'f',(0,'x',(1,(2,'f'),(1,(2,'n'),(1,(2,'f'),(2,'x')))))))
-ID = (0,'x',(2,'x'))
+SUCC = (0,'n',(0,'f',(0,'x',(1,(2,'f'),(1,(1,(2,'n'),(2,'f')),(2,'x'))))))
+ID = (0,'k',(2,'k'))
+
+ZERO = (0,'g',(0,'y',(2,'y')))
+ONE = (1,SUCC,ZERO)
+TWO = (1,SUCC,ONE)
+THREE = (1,SUCC,TWO)
+
 
 #retorna uma lista com as variaveis livres do ast.
 def freeVars(ast):
@@ -29,31 +35,42 @@ def replace(lam_term, new_exp, term):
         return (term[0],lhs,rhs)
 
 #faz a aplicacao de um redex (reduz ele).
-def reduct(redex):
-    exp1 = redex[1]
-    if not exp1[0] == S_LAMBDA:
-        return redex
-
-    exp2 = redex[2]
-
-    return replace(exp1[1], exp2, exp1[2])
+def betaApply(lhs,rhs):
+    if lhs[0] == S_LAMBDA:
+        return replace(lhs[1], rhs, lhs[2])
+    return (S_APPLY, lhs, rhs)
 
 def betaReduction(ast):
-    pass
-         
+    result = ast
+    while(isRedex(result)):
+        result = step(result)
+    return result
 
 def step(ast):
-    if ast[0] == S_APPLY and isRedex(ast):
-        return reduct(ast)
+    if ast[0] == S_VAR:
+        return ast
     elif ast[0] == S_LAMBDA:
-        s = step(ast[2])
-        return (ast[0],ast[1],s)
-    elif ast[0] == S_VAR:
-        pass
-    return ast
+        return (ast[0],ast[1],step(ast[2]))
+    elif ast[0] == S_APPLY:# and isRedex(ast):
+        lhs = step(ast[1])
+        rhs = step(ast[2])
+        
+        if lhs == None:
+            lhs = ast[1]
+        if rhs == None:
+            rhs = ast[2]
+             
+        ast = (ast[0],lhs,rhs)  
+        result = betaApply(ast[1],ast[2])
+
+        return result
 
 
 #verifica se uma expressao eh um redex.
 def isRedex(exp):
     empty = set()
-    return (freeVars(exp) != empty)
+    return (freeVars(exp) != empty) #isso nao ta certo.
+
+
+SZERO = betaApply(SUCC,ZERO)
+
