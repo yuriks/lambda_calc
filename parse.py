@@ -1,14 +1,15 @@
 # data Expr = '(' PExpr ')' | PExpr
-# data PExpr = Var | Apply | LExpr
+# data PExpr = Var | LExpr | Apply
 # data Var = 'a'..'z'
-# data Apply = Expr Expr
 # data LExpr = '$' Var ( '.' Expr )?
+# data Apply = Expr Expr
 
 import re
 
 token_re = re.compile(r'\s*(?:(\w+)|(\$)|(\.)|(\()|(\))|(.))')
 VAR = 1; LAMBDA = 2; DOT = 3; L_PAREN = 4; R_PAREN = 5; ERROR = 6
 
+# $x.$y.x y x
 # (S_LAMBDA, 'x', (S_LAMBDA, 'y', (S_APPLY, (S_APPLY, (S_VAR, 'x'), (S_VAR, 'y') ), (S_VAR, 'x'))))
 
 # (S_LAMBDA, var_name, contents)
@@ -44,12 +45,13 @@ def tryParseLExpr(tokens):
 		if tokens[0][0] != VAR:
 			raise ParseError("Expected Var")
 		t, var = tokens.pop(0)
-		if tokens[0][0] != DOT:
-			raise ParseError("Expected `.`")
-		tokens.pop(0)
-		m = tryParseExpr(tokens)
-		if m is None:
-			raise ParseError("Expected PExpr")
+		body = None
+		if tokens[0][0] == DOT:
+			tokens.pop(0)
+			expr = tryParseExpr(tokens)
+			if expr is None:
+				raise ParseError("Expected PExpr")
+		return (S_LAMBDA, var, body)
 	else:
 		return None
 
