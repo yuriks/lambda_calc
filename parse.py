@@ -56,7 +56,9 @@ def tryParseLExpr(tokens):
 		return None
 
 def tryParseApply(tokens):
-	pass
+	lhs = tryParseExpr(tokens)
+	rhs = tryParseExpr(tokens)
+	return (S_APPLY, lhs, rhs)
 
 def tryParsePExpr(tokens):
 	m = tryParseVar(tokens)
