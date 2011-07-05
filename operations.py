@@ -51,10 +51,9 @@ def betaReduction(ast):
     """
         Faz a beta reducao de AST ate o seu estado normal.
     """
-    result = ast
-    while(isRedex(result)):
-        result = step(result)
-    return result
+    while(isRedex(ast)):
+        ast = step(ast)
+    return ast
 
 def step(ast):
     """
@@ -64,7 +63,7 @@ def step(ast):
         return ast
     elif ast[0] == S_LAMBDA:
         return (ast[0],ast[1],step(ast[2]))
-    elif ast[0] == S_APPLY:# and isRedex(ast):
+    elif ast[0] == S_APPLY:
         lhs = step(ast[1])
         rhs = step(ast[2])
              
