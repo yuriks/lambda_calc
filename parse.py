@@ -105,8 +105,18 @@ def synthetize(ast):
     if ast[0] == S_VAR:
         return ast[1]
     elif ast[0] == S_LAMBDA:
-        return '$%s.(%s)' % (ast[1], synthetize(ast[2]))
+        return '$%s.%s' % (ast[1], synthetize(ast[2]))
     elif ast[0] == S_APPLY:
-        return '(%s %s)' % (synthetize(ast[1]), synthetize(ast[2]))
+        if ast[1][0] == S_LAMBDA:
+            left_fmt = '(%s) '
+        else:
+            left_fmt = '%s '
+
+        if ast[2][0] == S_VAR:
+            right_fmt = '%s'
+        else:
+            right_fmt = '(%s)'
+
+        return (left_fmt + right_fmt) % (synthetize(ast[1]), synthetize(ast[2]))
 
 __all__ = ['parse', 'synthetize', 'S_LAMBDA', 'S_APPLY', 'S_VAR', 'TokenizationError', 'ParseError']
