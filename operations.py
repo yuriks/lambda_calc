@@ -1,8 +1,8 @@
 from parse import *
 
 SUCC = (0,'n',(0,'f',(0,'x',(1,(2,'f'),(1,(1,(2,'n'),(2,'f')),(2,'x'))))))
-ADD = (0,'m',(0,'w',(0,'q',(0,'r',(1,(1,(2,'m'),(2,'q')),(1,(1,(2,'w'),(2,'q')),(2,'r')))))))
-ID = (0,'k',(2,'k'))
+ADD = (0,'m',(0,'n',(0,'f',(0,'x',(1,(1,(2,'m'),(2,'f')),(1,(1,(2,'n'),(2,'f')),(2,'x')))))))
+ID = (0,'x',(2,'x'))
 
 ZERO = (0,'f',(0,'x',(2,'x')))
 ONE = (1,SUCC,ZERO)
@@ -44,9 +44,7 @@ def betaApply(lhs,rhs):
         Faz uma aplicacao de rhs em lhs.
     """
     if lhs[0] == S_LAMBDA and not substIsSafe(lhs,lhs[1],rhs):
-        print 'not safe: %s' % synthetize(lhs)
         lhs = alphaReduction(lhs[2],lhs[2],rhs)
-        print 'novo: %s' % synthetize(lhs)
 
     if lhs[0] == S_LAMBDA:
         return replace(lhs[1], rhs, lhs[2])
@@ -56,7 +54,6 @@ def betaReduction(ast):
     """
         Faz a beta reducao de AST ate o seu estado normal.
     """
-    print 'betaReduct: %s' % synthetize(ast)
     while(isRedex(ast)):
         ast = step(ast)
     return ast
@@ -78,9 +75,6 @@ def alphaReduction(exp1,var,exp2):
     """
         faz a reducao alpha da variavel var de exp1 relativo a exp2.
     """
-#    a = synthetize(exp1)
-#    b = synthetize(exp2)
-#    print str(a) + ' [' + str(var) + '->' + str(b) + ']'
     if exp1[0] == S_VAR:
         if exp1[1] == var:
             return exp2
