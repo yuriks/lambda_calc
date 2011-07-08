@@ -97,8 +97,7 @@ def alphaReduction(exp1,var,exp2):
             while(lamt == var or lamt in fvars):
                 lamt = lamt + '\''
 
-            nexp1 = replace(exp1[1],(S_VAR,lamt),exp1[2])
-            #nexp1 = alphaReduction(exp1[2],exp[1],(S_VAR,lamt))
+            nexp1 = alphaReduction(exp1[2],exp1[1],(S_VAR,lamt))
             return (S_LAMBDA, lamt, alphaReduction(nexp1,var,exp2))
 
     elif exp1[0] == S_APPLY:
