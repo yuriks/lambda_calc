@@ -126,7 +126,7 @@ def hasRedex(exp):
     if exp[0] == S_VAR:
         return False
     if exp[0] == S_LAMBDA:
-        return isRedex(exp[2])
+        return hasRedex(exp[2])
     if exp[0] == S_APPLY:
         lhs = exp[1]
         rhs = exp[2]
@@ -134,4 +134,4 @@ def hasRedex(exp):
         if lhs[0] == S_LAMBDA:
             return True
         else:
-            return isRedex(lhs) or isRedex(rhs)
+            return hasRedex(lhs) or hasRedex(rhs)
