@@ -78,9 +78,9 @@ def alphaReduction(exp1,var,exp2):
     """
         faz a reducao alpha da variavel var de exp1 relativo a exp2.
     """
-    a = synthetize(exp1)
-    b = synthetize(exp2)
-    print str(a) + ' [' + str(var) + '->' + str(b) + ']'
+#    a = synthetize(exp1)
+#    b = synthetize(exp2)
+#    print str(a) + ' [' + str(var) + '->' + str(b) + ']'
     if exp1[0] == S_VAR:
         if exp1[1] == var:
             return exp2
