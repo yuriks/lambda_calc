@@ -44,7 +44,7 @@ def betaApply(lhs,rhs):
         Faz uma aplicacao de rhs em lhs.
     """
     if lhs[0] == S_LAMBDA and not substIsSafe(lhs,lhs[1],rhs):
-        lhs = alphaReduction(lhs[2],lhs[2],rhs)
+        lhs = alphaReduction(lhs,lhs[1],rhs)
 
     if lhs[0] == S_LAMBDA:
         return replace(lhs[1], rhs, lhs[2])
