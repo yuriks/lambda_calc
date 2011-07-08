@@ -26,9 +26,6 @@ def replace(lam_term, new_exp, term):
         Faz a substituicao de lam_term por new_exp em term.
         lam_term eh o nome do termo lambda. Ex.: $x.t (x eh o termo lambda).  
     """
-#    if not substIsSafe(term,lam_term,new_exp):
-#        term = alphaReduction(term,lam_term,new_exp)
-
     if term[0] == S_VAR:
         if term[1] == lam_term:
             return new_exp
@@ -46,6 +43,11 @@ def betaApply(lhs,rhs):
     """ 
         Faz uma aplicacao de rhs em lhs.
     """
+    if lhs[0] == S_LAMBDA and not substIsSafe(lhs,lhs[1],rhs):
+        print 'not safe: %s' % synthetize(lhs)
+        lhs = alphaReduction(lhs[2],lhs[2],rhs)
+        print 'novo: %s' % synthetize(lhs)
+
     if lhs[0] == S_LAMBDA:
         return replace(lhs[1], rhs, lhs[2])
     return (S_APPLY, lhs, rhs)
@@ -54,6 +56,7 @@ def betaReduction(ast):
     """
         Faz a beta reducao de AST ate o seu estado normal.
     """
+    print 'betaReduct: %s' % synthetize(ast)
     while(isRedex(ast)):
         ast = step(ast)
     return ast
@@ -75,8 +78,11 @@ def alphaReduction(exp1,var,exp2):
     """
         faz a reducao alpha da variavel var de exp1 relativo a exp2.
     """
+    a = synthetize(exp1)
+    b = synthetize(exp2)
+    print str(a) + ' [' + str(var) + '->' + str(b) + ']'
     if exp1[0] == S_VAR:
-        if var == exp1[1]:
+        if exp1[1] == var:
             return exp2
         else:
             return exp1
@@ -87,12 +93,13 @@ def alphaReduction(exp1,var,exp2):
             return (S_LAMBDA, exp1[1], alphaReduction(exp1[2],var,exp2))
         else:
             lamt = exp1[1] + '\''
-            fvars = freeVars((S_APPLY,exp1,exp2))
+            fvars = freeVars(exp1[2]).union(freeVars(exp2))
             while(lamt == var or lamt in fvars):
                 lamt = lamt + '\''
 
-            nexp1 = replace(exp1[1],lamt,exp1[2])
-            return (S_LAMBDA, lamt, alphaReduction(nexp1[2],var,exp2))
+            nexp1 = replace(exp1[1],(S_VAR,lamt),exp1[2])
+            #nexp1 = alphaReduction(exp1[2],exp[1],(S_VAR,lamt))
+            return (S_LAMBDA, lamt, alphaReduction(nexp1,var,exp2))
 
     elif exp1[0] == S_APPLY:
         lhs = exp1[1]
