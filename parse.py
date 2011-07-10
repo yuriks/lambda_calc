@@ -1,15 +1,15 @@
 # Apply = Expr+
 # Expr = LExpr | ApplyParen | Var
-# LExpr = '$' Var ( '.' Apply )?
+# LExpr = '\' Var ( '.' Apply )?
 # ApplyParen = '(' Apply ')'
 # Var = 'a'..'z'
 
 import re
 
-token_re = re.compile(r'\s*(?:(\w+)|(\$)|(\.)|(\()|(\))|(.))')
+token_re = re.compile(r'\s*(?:(\w+)|(\\)|(\.)|(\()|(\))|(.))')
 T_VAR = 1; T_LAMBDA = 2; T_DOT = 3; T_LPAREN = 4; T_RPAREN = 5; T_ERROR = 6; T_EOF = 7
 
-# $x.$y.x y x
+# \x.\y.x y x
 # (S_LAMBDA, 'x', (S_LAMBDA, 'y', (S_APPLY, (S_APPLY, (S_VAR, 'x'), (S_VAR, 'y') ), (S_VAR, 'x'))))
 
 # (S_LAMBDA, var_name, contents)
@@ -51,7 +51,7 @@ def parseApplyParen(tokens):
 def parseLExpr(tokens):
     t, v = tokens.pop(0)
     if t != T_LAMBDA:
-        raise ParseError("Expected `$`")
+        raise ParseError("Expected `\\`")
     t, var = tokens.pop(0)
     if t != T_VAR:
         raise ParseError("Expected Var")
@@ -105,7 +105,7 @@ def synthetize(ast):
     if ast[0] == S_VAR:
         return ast[1]
     elif ast[0] == S_LAMBDA:
-        return '$%s.%s' % (ast[1], synthetize(ast[2]))
+        return '\\%s.%s' % (ast[1], synthetize(ast[2]))
     elif ast[0] == S_APPLY:
         if ast[1][0] == S_LAMBDA:
             left_fmt = '(%s) '
