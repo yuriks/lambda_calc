@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
 
 import sys
 from optparse import OptionParser
@@ -14,7 +15,7 @@ def interactiveMode():
     ast = loadExpr()
     bsteps = appy(ast)
     for sn, step in enumerate(bsteps):
-        print sn, '->' synthetize(step) 
+        print sn, '->', synthetize(step) 
     if sys.stdin.isatty():
         op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
         if op.lower() == 'y':
@@ -34,12 +35,12 @@ def main():
     parser = OptionParser(usage="usage: %prog [options]")
     parser.add_option('-b', '--batch',
         action="store_false", dest="interactive",
-        help="Run in batch mode: Evaluates the expression an retuns
-                        normal form.")
+        help="""Run in batch mode: Evaluates the expression an retuns
+                        normal form.""")
     parser.add_option('-i', '--interactive',
         action="store_true",  dest="interactive", default=interactive,
-        help="Runs in interactive mode: Reads an lambda input and evaluate
-                        expression step-by-step.")
+        help="""Runs in interactive mode: Reads an lambda input and evaluate
+                        expression step-by-step.""")
 
     options, args = parser.parse_args()
     
