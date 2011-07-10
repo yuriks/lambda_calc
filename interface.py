@@ -6,18 +6,18 @@ from optparse import OptionParser
 from parse import *
 
 def loadExpr():
-    """Lê uma expressão (entrada via teclado)."""
-    expr = raw_input(u'Expressão: ')
+    """Le uma expressao (entrada via teclado)."""
+    expr = raw_input('Expressao: ')
     return parse(expr)
 
 def interactiveMode():
     """Inicia o modo interativo."""
     ast = loadExpr()
-    bsteps = appy(ast)
+    bsteps = apply(ast)
     for sn, step in enumerate(bsteps):
         print sn, '->', synthetize(step) 
     if sys.stdin.isatty():
-        op = raw_input(u'\nAvaliar mais expressões (y/n)? ')
+        op = raw_input('\nAvaliar mais expressoes (y/n)? ')
         if op.lower() == 'y':
             interactiveMode()
 
@@ -26,7 +26,7 @@ def batchMode(expr = None):
         expr = loadExpr()
     print synthetize(apply(expr)[-1]) 
     if sys.stdin.isatty():
-        if raw_input(u'Avaliar mais expressões (y/n)? ').lower() == 'y':
+        if raw_input(u'Avaliar mais expressoes (y/n)? ').lower() == 'y':
             batchMode()
 
 def main():
