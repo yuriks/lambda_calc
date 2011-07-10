@@ -1,6 +1,6 @@
 # Apply = Expr+
 # Expr = LExpr | ApplyParen | Var
-# LExpr = '\' Var ( '.' Apply )?
+# LExpr = '\' Var '.' Apply
 # ApplyParen = '(' Apply ')'
 # Var = 'a'..'z'
 
@@ -55,14 +55,10 @@ def parseLExpr(tokens):
     t, var = tokens.pop(0)
     if t != T_VAR:
         raise ParseError("Expected Var")
-    if tokens[0][0] == T_DOT:
-        t, v = tokens.pop(0)
-        if t != T_DOT:
-            raise ParseError("Expected `.`")
-        body = parseApply(tokens)
-    else:
-        body = None
-    return (S_LAMBDA, var, body)
+    t, v = tokens.pop(0)
+    if t != T_DOT:
+        raise ParseError("Expected `.`")
+    return (S_LAMBDA, var, parseApply(tokens))
 
 def parseExpr(tokens):
     peek = tokens[0][0]
@@ -76,7 +72,9 @@ def parseExpr(tokens):
         raise ParseError("Expected LExpr, Apply or Var")
 
 def makeApplyTree(expr_list):
-    if len(expr_list) == 1:
+    if len(expr_list) == 0:
+        raise ParseError("Expected LExpr, Apply or Var")
+    elif len(expr_list) == 1:
         return expr_list[0]
     else:
         return (S_APPLY, makeApplyTree(expr_list[:-1]), expr_list[-1])
