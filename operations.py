@@ -53,10 +53,14 @@ def betaApply(lhs,rhs):
 def betaReduction(ast):
     """
         Faz a beta reducao de AST ate o seu estado normal.
+        Retorna uma lista com todos os passos de b-reducao
     """
+    bsteps = []
     while(hasRedex(ast)):
+        bsteps.append(ast)
         ast = step(ast)
-    return ast
+    bsteps.append(ast)
+    return bsteps 
 
 def substIsSafe(exp1, var, exp2):
     """
