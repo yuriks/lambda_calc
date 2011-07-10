@@ -4,6 +4,7 @@
 import sys
 from optparse import OptionParser
 from parse import *
+from operations import *
 
 def loadExpr():
     """Le uma expressao (entrada via teclado)."""
@@ -13,7 +14,7 @@ def loadExpr():
 def interactiveMode():
     """Inicia o modo interativo."""
     ast = loadExpr()
-    bsteps = apply(ast)
+    bsteps = betaReduction(ast)
     for sn, step in enumerate(bsteps):
         print sn, '->', synthetize(step) 
     if sys.stdin.isatty():
@@ -24,7 +25,7 @@ def interactiveMode():
 def batchMode(expr = None):
     if expr is None:
         expr = loadExpr()
-    print synthetize(apply(expr)[-1]) 
+    print synthetize(betaReduction(expr)[-1]) 
     if sys.stdin.isatty():
         if raw_input(u'Avaliar mais expressoes (y/n)? ').lower() == 'y':
             batchMode()
@@ -43,10 +44,12 @@ def main():
                         expression step-by-step.""")
 
     options, args = parser.parse_args()
-    
-    if(interactive):
+
+    if options.interactive == True:
+        print "Modo interativo."
         interactiveMode(); 
     else:
+        print "Modo batch."
         batchMode();
 
 if __name__ == '__main__':
