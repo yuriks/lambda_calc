@@ -18,17 +18,14 @@ def interactiveMode():
     for sn, step in enumerate(bsteps):
         print sn, '->', synthetize(step) 
     if sys.stdin.isatty():
-        op = raw_input('\nAvaliar mais expressoes (y/n)? ')
-        if op.lower() == 'y':
-            interactiveMode()
+        interactiveMode()
 
 def batchMode(expr = None):
     if expr is None:
         expr = loadExpr()
     print synthetize(betaReduction(expr)[-1]) 
     if sys.stdin.isatty():
-        if raw_input(u'Avaliar mais expressoes (y/n)? ').lower() == 'y':
-            batchMode()
+        batchMode()
 
 def main():
     interactive = sys.stdin.isatty() and sys.stdout.isatty()
