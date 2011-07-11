@@ -9,21 +9,27 @@ from operations import *
 def loadExpr():
     """Le uma expressao (entrada via teclado)."""
     expr = raw_input('Expressao: ')
+    if len(expr) > 0 and expr[0] == '=':
+        l = expr[1:].split(' ', 1)
+        symb_dict[l[0]] = parse(l[1])
+        return None
     return parse(expr)
 
 def interactiveMode():
     """Inicia o modo interativo."""
     ast = loadExpr()
-    bsteps = betaReduction(ast)
-    for sn, step in enumerate(bsteps):
-        print sn, '->', synthetize(step) 
+    if ast is not None:
+        bsteps = betaReduction(ast)
+        for sn, step in enumerate(bsteps):
+            print sn, '->', synthetize(step) 
     if sys.stdin.isatty():
         interactiveMode()
 
 def batchMode(expr = None):
     if expr is None:
         expr = loadExpr()
-    print synthetize(betaReduction(expr)[-1]) 
+    if expr is not None:
+        print synthetize(betaReduction(expr)[-1]) 
     if sys.stdin.isatty():
         batchMode()
 

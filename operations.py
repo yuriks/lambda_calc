@@ -1,5 +1,7 @@
 from parse import *
 
+symb_dict = {}
+
 SUCC = (0,'n',(0,'f',(0,'x',(1,(2,'f'),(1,(1,(2,'n'),(2,'f')),(2,'x'))))))
 ADD = (0,'m',(0,'n',(0,'f',(0,'x',(1,(1,(2,'m'),(2,'f')),(1,(1,(2,'n'),(2,'f')),(2,'x')))))))
 ID = (0,'x',(2,'x'))
@@ -111,7 +113,10 @@ def step(ast):
         Faz uma etapa da beta reducao de AST.
     """
     if ast[0] == S_VAR:
-        return (False, ast)
+        if ast[1] in symb_dict:
+            return (True, symb_dict[ast[1]])
+        else:
+            return (False, ast)
     elif ast[0] == S_LAMBDA:
         did_step, body = step(ast[2])
         return (did_step, (ast[0],ast[1],body))
