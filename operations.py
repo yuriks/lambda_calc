@@ -45,11 +45,11 @@ def betaApply(lhs,rhs):
     """
     if lhs[0] == S_LAMBDA and not substIsSafe(lhs,lhs[1],rhs):
         lhs = alphaReduction(lhs[2],lhs[1],rhs)
-        return lhs
+        return (True, lhs)
 
     if lhs[0] == S_LAMBDA:
-        return replace(lhs[1], rhs, lhs[2])
-    return (S_APPLY, lhs, rhs)
+        return (True, replace(lhs[1], rhs, lhs[2]))
+    return (False, (S_APPLY, lhs, rhs))
 
 def betaReduction(ast):
     """
@@ -57,9 +57,10 @@ def betaReduction(ast):
         Retorna uma lista com todos os passos de b-reducao
     """
     bsteps = []
-    while(hasRedex(ast)):
+    go = True
+    while(go):
         bsteps.append(ast)
-        ast = step(ast)
+        go, ast = step(ast)
     bsteps.append(ast)
     return bsteps 
 
@@ -110,17 +111,24 @@ def step(ast):
         Faz uma etapa da beta reducao de AST.
     """
     if ast[0] == S_VAR:
-        return ast
+        return (False, ast)
     elif ast[0] == S_LAMBDA:
-        return (ast[0],ast[1],step(ast[2]))
+        did_step, body = step(ast[2])
+        return (did_step, (ast[0],ast[1],body))
     elif ast[0] == S_APPLY:
-        lhs = step(ast[1])
-        rhs = step(ast[2])
-             
-        ast = (ast[0],lhs,rhs)  
-        result = betaApply(ast[1],ast[2])
+        did_step1, lhs = step(ast[1])
+        did_step2, rhs = step(ast[2])
 
-        return result
+        did_step = did_step1 or did_step2
+
+        ast = (ast[0],lhs,rhs)
+
+        if not did_step:
+            did_step, result = betaApply(ast[1],ast[2])
+        else:
+            result = ast
+
+        return (did_step, result)
 
 def hasRedex(exp):
     """ 
