@@ -44,7 +44,8 @@ def betaApply(lhs,rhs):
         Faz uma aplicacao de rhs em lhs.
     """
     if lhs[0] == S_LAMBDA and not substIsSafe(lhs,lhs[1],rhs):
-        lhs = alphaReduction(lhs,lhs[1],rhs)
+        lhs = alphaReduction(lhs[2],lhs[1],rhs)
+        return lhs
 
     if lhs[0] == S_LAMBDA:
         return replace(lhs[1], rhs, lhs[2])
@@ -67,7 +68,7 @@ def substIsSafe(exp1, var, exp2):
         Verifica se a substituicao de var por exp2 em exp1 eh segura.
     """
     fvars2 = freeVars(exp2)
-    nexp = replace(var,exp2,exp1)
+    nexp = alphaReduction(exp1,var,exp2)
 
     fvarsn = freeVars(nexp)
 
